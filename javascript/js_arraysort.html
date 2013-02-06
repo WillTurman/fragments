@@ -5,10 +5,18 @@
 
 <script> 
 
-var array = [9, 15, 16.3, 22.25, 100];
-var sorted = array.sort(function(a,b){ return a - b });
-console.log(array);
-console.log(sorted);
+var array = [9, 15, 45, 67, 16.3, 22.25, 100];
+console.log("array ", array);
+
+var ascending = array.sort(function(a,b){ return a - b });
+console.log("ascending ", ascending);
+
+var array = [9, 15, 45, 67, 16.3, 22.25, 100];
+console.log("array ", array);
+
+var descending = array.sort(function(a,b){ return b - a});
+console.log("descending ", descending);
+
 
 </script> 
 
