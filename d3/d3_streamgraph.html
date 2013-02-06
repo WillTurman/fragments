@@ -42,8 +42,8 @@ var yAxis = d3.svg.axis()
 var stack = d3.layout.stack()
   .offset("zero")
   .values(function(d) { return d.values; })
-  .x( function(d) { return d.date; })
-  .y( function(d) { return d.value; });
+  .x(function(d) { return d.date; })
+  .y(function(d) { return d.value; });
 
 
 var area = d3.svg.area().interpolate("cardinal")
@@ -97,7 +97,18 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
   console.log(d3.extent(data, function(d) { return d.date; }));
 
   y.domain([0, 160]);
-  console.log(data.map(function(d) { return +d.PS; }));  
+
+  console.log("data length: ", data.length);
+  var rowone = data[1];
+  rowone.length = 7;
+  var out = Array.prototype.slice.call(rowone);
+  console.log(out);
+  console.log(rowone);
+  
+
+  
+    
+  
 
 
   svg.selectAll(".layer")
