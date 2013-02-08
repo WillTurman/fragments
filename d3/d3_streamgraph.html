@@ -21,7 +21,7 @@ body {
 <script>
 var total = 0;
 var margin = { top: 20, right: 40, bottom: 20, left: 20};
-var width = 960 - margin.left - margin.right;
+var width = document.body.clientWidth - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom; 
 
 var x = d3.time.scale().range([0, width]);
@@ -89,22 +89,53 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
   });
 
 
-   console.log(layers[0].values[2]); 
-   console.log(stack(layers));
+   //console.log(layers[0].values[2]); 
+   //console.log(stack(layers));
 
 
   x.domain(d3.extent(data, function(d) { return d.date; }));
-  console.log(d3.extent(data, function(d) { return d.date; }));
 
-  y.domain([0, 160]);
+  var total = 0;
+  for(var i = 0; i < data.length; i++) { 
+      var row = data[i];
+          row = d3.values(row);
+      var rowsum = 0;
+      for (var j in row) {
+          if(j!=0) {
+              console.log(row[j]);
+              rowsum += +row[j];
+          }
+      }
+      if(rowsum > total) {
+          total = rowsum;
+      }
+      console.log(total);
+      console.log(rowsum);
+    }
+  total = total + 10;
+  
+  y.domain([0, total]);
 
   console.log("data length: ", data.length);
-  var rowone = data[1];
-  rowone.length = 7;
-  var out = Array.prototype.slice.call(rowone);
-  console.log(out);
-  console.log(rowone);
-  
+
+  var total = 0;
+  for(var i = 0; i < data.length; i++) { 
+      var row = data[i];
+          row = d3.values(row);
+      var rowsum = 0;
+      for (var j in row) {
+          if (j!=0) {
+              console.log(row[j]);
+              rowsum += +row[j];
+          }
+      }
+      if (rowsum > total) {
+          total = rowsum;
+      }
+      console.log(total);
+      console.log(rowsum);
+  }
+
 
   
     
