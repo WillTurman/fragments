@@ -25,8 +25,19 @@ var margin = { top: 20, right: 40, bottom: 20, left: 30 };
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom; 
 
+var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "remove")
+    .style("position", "absolute")
+    .style("z-index", "20")
+    .style("visibility", "hidden")
+    .style("top", "50px")
+    .style("left", "75px");
+
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
+
+var datearray = [];
 
 var colorrange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
 var z = d3.scale.ordinal().range(colorrange);
@@ -34,7 +45,7 @@ var z = d3.scale.ordinal().range(colorrange);
 var xAxis = d3.svg.axis()
   .scale(x)
   .orient("bottom")
-  .ticks(d3.time.days);
+  .ticks(d3.time.weeks);
 
 var yAxis = d3.svg.axis()
   .orient("right")
@@ -45,7 +56,6 @@ var stack = d3.layout.stack()
   .values(function(d) { return d.values; })
   .x(function(d) { return d.date; })
   .y(function(d) { return d.value; });
-
 
 var area = d3.svg.area().interpolate("cardinal")
     .x(function(d) { return x(d.date); })
@@ -77,7 +87,7 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
     return {
       key: name,
       values: data.map(function(d) { 
-        return { date: d.date, value: +d[name] };
+        return { date: d.date, value: +d[name], player: name };
       })
     };
   });
@@ -86,20 +96,20 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
 
   var total = 0;
   for(var i = 0; i < data.length; i++) { 
-      var row = data[i];
-          row = d3.values(row);
-      var rowsum = 0;
-      for (var j in row) {
-          if(j!=0) {
-              rowsum += +row[j];
-          }
-      }
-      if(rowsum > total) {
-          total = rowsum;
-      }
-      console.log(rowsum);
-      console.log(total);    
+    var row = data[i];
+        row = d3.values(row);
+    var rowsum = 0;
+    for (var j in row) {
+        if(j!=0) {
+            rowsum += +row[j];
+        }
     }
+    if(rowsum > total) {
+        total = rowsum;
+    }
+    console.log(rowsum);
+    console.log(total);    
+  }
   total = total + 10;
   
   y.domain([0, total]);
@@ -125,8 +135,31 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
 
-
-
+  svg.selectAll(".layer")
+    .on("mousemove", function(d, i) {
+      var mousex = d3.mouse(this);
+          mousex = mousex[0];
+   
+      var invertedx = x.invert(mousex);
+          invertedx = invertedx.getMonth() + invertedx.getDate();
+  
+      var selected = (d.values);
+          for (var k = 0; k < selected.length; k++) {
+            datearray[k] = selected[k].date;
+            datearray[k] = datearray[k].getMonth() + datearray[k].getDate();
+          }
+      mousedate = datearray.indexOf(invertedx);
+      pro = d.values[mousedate].value;
+      date = d.values[mousedate].date;
+      date = format(date);
+      player = d.values[mousedate].player; 
+      //console.log("production: ", pro, " date: ", date, " player: ", player);
+      d3.select(this), 
+      tooltip.html("<h3>" + "player: " + player + "<br>date: " + date + "<br>production: " + pro + "</h3>").style("visibility", "visible");
+    })
+    .on("mouseout", function(d, i) {
+      tooltip.style("visibility", "hidden");
+    })
 });
 
 </script>
