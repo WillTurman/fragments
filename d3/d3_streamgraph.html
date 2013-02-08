@@ -19,6 +19,7 @@ body {
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
+
 var total = 0;
 var margin = { top: 20, right: 40, bottom: 20, left: 20};
 var width = document.body.clientWidth - margin.left - margin.right;
@@ -63,17 +64,10 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
   data = csv;
   console.log(data);
 
-    
-
   var dimensions = d3.keys(data[0]).filter(function(key) { return key != "date"; });
 
   data.forEach(function(d) {
     d.date = format.parse(d.date);
-
-    //sum the values in the d object. 
-    //http://stackoverflow.com/questions/4047896/sum-of-javascript-object
-    //pass to y.domain
-  
   });
 
   var streamgroup = svg.append("g").attr("class", "streamgroup");
@@ -88,11 +82,6 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
     };
   });
 
-
-   //console.log(layers[0].values[2]); 
-   //console.log(stack(layers));
-
-
   x.domain(d3.extent(data, function(d) { return d.date; }));
 
   var total = 0;
@@ -102,45 +91,18 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
       var rowsum = 0;
       for (var j in row) {
           if(j!=0) {
-              console.log(row[j]);
               rowsum += +row[j];
           }
       }
       if(rowsum > total) {
           total = rowsum;
       }
-      console.log(total);
       console.log(rowsum);
+      console.log(total);    
     }
   total = total + 10;
   
   y.domain([0, total]);
-
-  console.log("data length: ", data.length);
-
-  var total = 0;
-  for(var i = 0; i < data.length; i++) { 
-      var row = data[i];
-          row = d3.values(row);
-      var rowsum = 0;
-      for (var j in row) {
-          if (j!=0) {
-              console.log(row[j]);
-              rowsum += +row[j];
-          }
-      }
-      if (rowsum > total) {
-          total = rowsum;
-      }
-      console.log(total);
-      console.log(rowsum);
-  }
-
-
-  
-    
-  
-
 
   svg.selectAll(".layer")
     .data(stack(layers))
@@ -160,8 +122,6 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
     .call(xAxis);
 
 });
-
-
 
 </script>
 </html>
