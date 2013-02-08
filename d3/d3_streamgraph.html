@@ -21,7 +21,7 @@ body {
 <script>
 
 var total = 0;
-var margin = { top: 20, right: 40, bottom: 20, left: 20};
+var margin = { top: 20, right: 40, bottom: 20, left: 30 };
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom; 
 
@@ -117,9 +117,15 @@ var chart = d3.csv("data/streamalt.csv", function(csv) {
     .call(yAxis);
 
   svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis.orient("left"));
+
+  svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
+
+
 
 });
 
