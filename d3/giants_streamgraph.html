@@ -15,7 +15,7 @@ body {
 </style>
 <body>
 <div>
-  <h3>2012 San Francisco Giants Streamgraph</h3>
+  <h3>2012 San Francisco Giants Streamgraph *</h3>
   <p>Production value (layer height) is a 10 day rolling average of weighted On Base Average (wOBA) * Plate Appearances (PA)   
 </div> 
 <div class="chart"></div> 
@@ -168,7 +168,9 @@ var chart = d3.csv("data/giantsavg10stream.csv", function(csv) {
 </script>
 
 <div>
-  <p>Created by: Will Turman | <A href="http://twitter.com/graphicbaseball">@graphicbaseball</a></p>
+  <p>* batters with > 100 Plate Appearances</p>
+
+  <h4>Created by: Will Turman | <A href="http://twitter.com/graphicbaseball">@graphicbaseball</a></h4>
 </div> 
 
 </html>
