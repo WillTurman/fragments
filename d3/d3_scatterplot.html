@@ -22,11 +22,24 @@ body {
 	stroke: #000;
 }
 
+.tooltip {
+
+}
+
 </style> 
 <body>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
+
+	var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "20")
+    .style("visibility", "hidden")
+    .style("top", "50px")
+    .style("left", "75px");
 
 	var margin = {top: 20, right: 20, bottom: 30, left: 40};
 	var width = 960 - margin.left -margin.right;
@@ -38,7 +51,8 @@ body {
 	var y = d3.scale.linear()
 		.range([height, 0]);
 
-	var color = d3.scale.category10();
+	var color = ["#0E3758", "#146185", "#6CA1DA", "#595959"];
+	var colorx = d3.scale.ordinal().range(color);
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
@@ -70,6 +84,15 @@ body {
 		console.log(x(-0.8));
 		console.log(x(0.8));
 
+		svg.append("g")
+			.attr("class", "box")
+			.append("rect")
+			.attr("x", x(-0.8))
+			.attr("y", 30)
+			.attr("width", (x(0.8)-x(-0.8)))
+			.attr("height", 300)
+			.style();
+
 
 		svg.selectAll(".dot")
 			.data(data)
@@ -78,14 +101,21 @@ body {
 			.attr("r", 7)
 			.attr("cx", function(d) { return x(d.x); })
 			.attr("cy", function(d) { return y(d.y); })
-			.style("fill", function(d) { return color(d.t); })
+			.style("fill", function(d) { return colorx(d.t); })
 			.on("mouseover", function(d) { 
 				d3.select(this)
-					.attr("r", 15);
+					.transition().duration(50).attr("r", 15), 
+					tooltip.html("<h3>" + "x: " + d.x + "<br>y: " + d.y + "<br>type: " + d.t + "</h3>")
+					.style("transition-property", "opacity")
+					.style("transition-duration", "0.7s")
+					.style("opacity", "1")
+					.style("visibility", "visible");
 			})
 			.on("mouseout", function(d) {
 				d3.select(this)
-					.attr("r", 7);
+					.transition().duration(50).attr("r", 7),
+					tooltip.html("<h3>" + "x: " + d.x + "<br>y: " + d.y + "<br>type: " + d.t + "</h3>")
+					.style("visibility", "hidden");
 			});
 
 		svg.append("g")
@@ -110,14 +140,7 @@ body {
 			.style("text-anchor", "end")
 			.text("y-axis");
 
-		svg.append("g")
-			.attr("class", "box")
-			.append("rect")
-			.attr("x", x(-0.8))
-			.attr("y", 30)
-			.attr("width", (x(0.8)-x(-0.8)))
-			.attr("height", 300)
-			.style();
+		
 
 	});
 
