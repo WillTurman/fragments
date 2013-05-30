@@ -1,0 +1,77 @@
+<!DOCTYPE html> 
+<meta charset="utf-8">
+<style> 
+
+body {
+	font: 10px sans-serif;
+}
+
+.axis path
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+.x.axis path {
+	display: none;
+}
+
+.line {
+	fill: none;
+	stroke:	#4682B4;
+	stroke-width: 1.5px;
+}
+
+</style>
+
+<body> 
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var data = [{"id": 1, "date": "20130501", "AZ": 0, "CO": 0, "LA": 0, "SD": 0, "SF": 0}
+			{"id": 2, "date": "20130502", "AZ": 1, "CO": 1, "LA": 0, "SD": -1, "SF": 0}
+			{"id": 3, "date": "20130503", "AZ": 0, "CO": 2, "LA": -1, "SD": -2, "SF": 0}
+			{"id": 4, "date": "20130504", "AZ": -1, "CO": 3, "LA": -2, "SD": -3, "SF": 0}
+			{"id": 5, "date": "20130505", "AZ": 0, "CO": 3, "LA": -3, "SD": -4, "SF": 0}
+			{"id": 6, "date": "20130506", "AZ": 1, "CO": 2, "LA": -2, "SD": -3, "SF": 0}
+			{"id": 7, "date": "20130507", "AZ": 2, "CO": 1, "LA": -3, "SD": -4, "SF": 0}
+			{"id": 8, "date": "20130508", "AZ": 3, "CO": 2, "LA": -2, "SD": -5, "SF": 0}
+			{"id": 9, "date": "20130509", "AZ": 2, "CO": 3, "LA": -3, "SD": -4, "SF": 0}
+			{"id": 10, "date": "20130510", "AZ": 3, "CO": 2, "LA": -4, "SD": -5, "SF": 0}
+			]
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50};
+var width = 960 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
+
+var parseDate = d3.time.fotmat("%Y%m%d").parse;
+
+var x = d3.time.scale()
+	.range([height, 0]);
+
+var y = d3.scale.linear()
+	.range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+	.scale(x)
+	.orient("left");
+
+var yAxis = d3.svg.line()
+	.interpolate("basis")
+	.x(function(d) { return x(d.date); })
+	.y(function(d) { return y(d.temperature); });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+
+</script>
+</body>
